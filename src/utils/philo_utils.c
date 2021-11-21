@@ -12,20 +12,39 @@
 
 #include "philosophers.h"
 
-long long	get_curr_time(t_data *forks)
+long convert_usec_to_ms(long usec)
 {
-	struct timeval	time;
-	long long	curr_time;
-	long long	diff;
+	return (usec / 1000);
+}
+
+long timeval_to_usec(struct timeval *time)
+{
+	long	curr_time;
+
+	curr_time = time->tv_sec * 1000000 + time->tv_usec;
+	return (curr_time);
+}
+
+
+/**
+ * @brief Get the curr time object.
+ * 
+ * curr_time is the current time since
+ * start of simulation
+ * 
+ * @param data  - main struct
+ * @return long long with current time in ms
+ */
+long get_curr_time(t_data *data)
+{
+	struct timeval	*time;
 
 	if (gettimeofday(&time, NULL))
 		return (-1);
-	curr_time = time.tv_sec * 1000000 + time.tv_usec;
-	diff = (curr_time - forks->time_in_usec) / 1000;
-	return (diff);
+	return (get_time_diff(time, data->time_in_usec));
 }
 
-void	check_dead(t_data *phil)
+void	check_dead(t_data *data)
 {
 	int	i;
 	long	death_timer;
@@ -35,14 +54,22 @@ void	check_dead(t_data *phil)
 	death_timer = 0;
 	while (i < 4)
 	{
-		curr_time = get_curr_time(phil);
-		death_timer = curr_time - phil->philos[i].last_meal;
-		if (death_timer > phil->die_timer)
+		curr_time = get_curr_time(data);
+		death_timer = curr_time - data->philos[i].last_meal;
+		if (death_timer > data->settings->die_timer)
 		{
-			phil->dead = 1;
-			printf("%llums Philosopher: %d died\n", curr_time, *phil->cnt);
+			data->dead_philo = 1;
+			printf("%llums Philosopher: %d died\n", curr_time, data->settings->philo_nbr);
 			exit(-1);
 		}
 		i++;
 	}
+}
+
+long get_time_diff(struct timeval *present, struct timeval *past)
+{
+	long time;
+
+	time = (timeval_to_usec(present) - timeval_to_usec(past));
+	return(convert_usec_to_ms(time));
 }

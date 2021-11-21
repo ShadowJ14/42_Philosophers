@@ -12,25 +12,28 @@
 
 #include "philosophers.h"
 
-void	init_philos(t_data *forks, char *argv[])
+void	init_philos(t_data *data, char *argv[])
 {
 	int	i;
 
 	i = -1;
-	forks->philo_nbr = ft_atoi(argv[1]);
-	forks->die_timer = ft_atoi(argv[2]);
-	forks->eat_timer = ft_atoi(argv[3]);
-	forks->slp_timer = ft_atoi(argv[4]);
+	data->settings->philo_nbr = ft_atoi(argv[1]);
+	data->settings->die_timer = ft_atoi(argv[2]);
+	data->settings->eat_timer = ft_atoi(argv[3]);
+	data->settings->slp_timer = ft_atoi(argv[4]);
 	if (argv[5])
 	{
-		forks->eat_cnt = ft_atoi(argv[5]);
-		//printf("%d %d %d %d %d\n", philo_nbr, forks->die_timer, forks->eat_timer, forks->slp_timer, forks->eat_cnt);
+		data->settings->meals_nbr = ft_atoi(argv[5]);
+		//printf("%d %d %d %d %d\n", philo_nbr, data->die_timer, data->eat_timer, data->slp_timer, data->eat_cnt);
 	}
-	else;
-		//printf("%d %d %d %d\n", philo_nbr, forks->die_timer, forks->eat_timer, forks->slp_timer);
-	forks->philos = malloc(sizeof(t_philos) * (forks->philo_nbr));
-	forks->fork = malloc(sizeof(pthread_mutex_t) * forks->philo_nbr);
-	while (++i < forks->philo_nbr)
-		forks->philos[i].last_meal = 0;
-	forks->dead = 0;
+	else
+	{
+		;
+	}
+		//printf("%d %d %d %d\n", philo_nbr, data->die_timer, data->eat_timer, data->slp_timer);
+	data->philos = malloc(sizeof(t_philos) * (data->settings->philo_nbr));
+	data->forks = malloc(sizeof(pthread_mutex_t) * data->settings->philo_nbr);
+	// while (++i < data->settings->philo_nbr)
+	// 	data->philos[i].last_meal = 0;
+	data->dead_philo = 0;
 }
