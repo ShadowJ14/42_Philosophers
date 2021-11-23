@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lprates <lprates@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/17 15:05:29 by lprates           #+#    #+#             */
-/*   Updated: 2021/10/23 18:41:13 by lprates          ###   ########.fr       */
+/*   Updated: 2021/11/23 23:04:29 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ typedef struct s_data
 }				t_data;
 
 int		ft_atoi(const char *str);
-void	init_philos(t_data *data, char *argv[]);
+int		init_philos(t_data *data, char *argv[]);
 long	get_time(t_data *data);
 int		check_dead(t_data *data);
 long	timeval_to_usec(struct timeval *time);
@@ -69,5 +69,7 @@ void	drops_forks(t_philos *philo, int philo_i, t_data *data);
 int		check_all_full(t_data *data);
 void	philo_eating(t_philos *philo, t_data *data);
 void	philo_sleeping_and_thinking(t_philos *philo, t_data *data);
+int		error_handling(int error, t_data *data);
+void	destroy_forks(t_data *data);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lprates <lprates@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/17 15:05:05 by lprates           #+#    #+#             */
-/*   Updated: 2021/10/23 18:41:59 by lprates          ###   ########.fr       */
+/*   Updated: 2021/11/23 23:05:26 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ void	*start_sim(void *input)
 		{
 			philo_eating(philo, data);
 			drops_forks(philo, philo->i, data);
+			philo_sleeping_and_thinking(philo, data);
 			if (data->settings.meals_nbr && check_all_full(data))
 				return (NULL);
-			philo_sleeping_and_thinking(philo, data);
 		}
 	}
 	return (NULL);
@@ -43,8 +43,11 @@ void	destroy_forks(t_data *data)
 	while (data->settings.philo_nbr >= 0)
 		pthread_mutex_destroy(&data->forks[data->settings.philo_nbr--].fork);
 	pthread_mutex_destroy(&data->increment);
-	free(data->forks);
-	free(data->philos);
+	pthread_mutex_destroy(&data->death_lock);
+	if (data->forks)
+		free(data->forks);
+	if (data->philos)
+		free(data->philos);
 	free(data);
 }
 
@@ -67,23 +70,24 @@ int	create_philos(t_data *data)
 	while (++cnt < data->settings.philo_nbr)
 		if (pthread_join(data->philos[cnt].thread, NULL))
 			return (-1);
-	return (1);
+	return (0);
 }
 
 int	main(int argc, char *argv[])
 {
 	t_data			*data;
 
+	data = NULL;
 	if (argc < 5 || argc > 6)
-		return (-1);
+		return (error_handling(-1, data));
 	data = malloc(sizeof(t_data) * 1);
 	if (!data)
-		return (-1);
+		return (error_handling(-2, data));
 	if (gettimeofday(&data->start_time, NULL))
-		return (-1);
-	init_philos(data, argv);
-	if (!data->philos || !data->forks)
-		return (-1);
-	create_philos(data);
+		return (error_handling(-3, data));
+	if (init_philos(data, argv))
+		return (error_handling(-4, data));
+	if (create_philos(data))
+		return (error_handling(-5, data));
 	destroy_forks(data);
 }
