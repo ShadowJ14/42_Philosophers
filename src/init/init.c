@@ -32,11 +32,10 @@ void	init_philos(t_data *data, char *argv[])
 	while (++i < data->settings.philo_nbr)
 	{
 		data->philos[i].last_meal = 0;
-		data->philos[i].index = i;
+		data->philos[i].i = i;
 		data->forks[i].taken = 0;
 		if (argv[5])
 			data->philos[i].meals_left = data->settings.meals_nbr;
-		
 	}
 	data->dead_philo = 0;
 }

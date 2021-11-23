@@ -6,16 +6,16 @@ SRC = $(call rwildcard,src,*.c)
 OBJ := $(SRC:.c=.o)
 RM = rm -f
 MAKE = make
-CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -g -fsanitize=thread
 CC = gcc
 
 all: $(NAME) 
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c $^ -o $@ $(INCLUDES)
+	$(CC) $(CFLAGS) -c -pthread $^ -o $@ $(INCLUDES)
 
 $(NAME): $(OBJ)
-	$(CC) $(CFLAGS) $^ -o $@ $(INCLUDES)
+	$(CC) $(CFLAGS) -pthread $^ -o $@ $(INCLUDES)
 
 
 clean:

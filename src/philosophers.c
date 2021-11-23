@@ -12,10 +12,9 @@
 
 #include "philosophers.h"
 
-void	*test(void *input)
+void	*start_sim(void *input)
 {
 	t_data		*data;
-	long		curr_time;
 	t_philos	*philo;
 	static int	index = 0;
 
@@ -27,36 +26,13 @@ void	*test(void *input)
 	{
 		if (check_dead(data))
 			return (NULL);
-		if (can_take_forks(philo->index, data))
+		if (can_take_forks(philo, philo->i, data))
 		{
-			curr_time = get_curr_time(data);
-			philo->last_meal = curr_time;
-			if (!data->dead_philo)
-			{
-				printf("%lums Philosopher: %d has taken a fork\n", curr_time, philo->index + 1);
-				printf("%lums Philosopher: %d has taken a fork\n", curr_time, philo->index + 1);
-			}
-			pthread_mutex_lock(&data->forks[(philo->index + 1) % data->settings.philo_nbr].fork);
-			pthread_mutex_lock(&data->forks[philo->index].fork);
-			if (!data->dead_philo)
-				printf("%lums Philosopher: %d is eating\n", get_curr_time(data), philo->index + 1);
-			usleep(data->settings.eat_timer * 1000);
-			pthread_mutex_unlock(&data->forks[philo->index].fork);
-			pthread_mutex_unlock(&data->forks[(philo->index + 1) % data->settings.philo_nbr].fork);
-			drops_forks(philo->index, data);
-			if (data->settings.meals_nbr)
-			{
-				if (philo->meals_left)
-					philo->meals_left--;
-				if (check_all_full(data))
-					return (NULL);
-			}
-			curr_time = get_curr_time(data);
-			if (!data->dead_philo)
-				printf("%lums Philosopher: %d is sleeping\n", curr_time, philo->index + 1);
-			usleep(data->settings.slp_timer * 1000);
-			if (!data->dead_philo)
-				printf("%lums Philosopher: %d is thinking\n", get_curr_time(data), philo->index + 1);
+			philo_eating(philo, data);
+			drops_forks(philo, philo->i, data);
+			if (data->settings.meals_nbr && check_all_full(data))
+				return (NULL);
+			philo_sleeping_and_thinking(philo, data);
 		}
 	}
 	return (NULL);
@@ -64,7 +40,7 @@ void	*test(void *input)
 
 void	destroy_forks(t_data *data)
 {
-	while (data->settings.philo_nbr <= 0)
+	while (data->settings.philo_nbr >= 0)
 		pthread_mutex_destroy(&data->forks[data->settings.philo_nbr--].fork);
 	pthread_mutex_destroy(&data->increment);
 	free(data->forks);
@@ -84,7 +60,7 @@ int	create_philos(t_data *data)
 	cnt = -1;
 	while (++cnt < data->settings.philo_nbr)
 	{
-		if (pthread_create(&data->philos[cnt].thread, NULL, &test, data))
+		if (pthread_create(&data->philos[cnt].thread, NULL, &start_sim, data))
 			return (-1);
 	}
 	cnt = -1;
