@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/23 21:40:12 by lprates           #+#    #+#             */
-/*   Updated: 2022/01/08 00:19:04 by lprates          ###   ########.fr       */
+/*   Updated: 2022/01/08 00:51:28 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,16 @@ void	philo_eating(t_philos *philo, t_data *data)
 	return ;
 }
 
-void	philo_sleeping_and_thinking(t_philos *philo, t_data *data)
+int	philo_sleeping_and_thinking(t_philos *philo, t_data *data)
 {
 	if (!data->dead_philo)
 		printf("%lu %d is sleeping\n", get_time(data), philo->i + 1);
+	if (data->settings.meals_nbr && check_all_full(data))
+		return (1);
 	usleep(data->settings.slp_timer * 1000);
 	if (!data->dead_philo)
 		printf("%lu %d is thinking\n", get_time(data), philo->i + 1);
-	return ;
+	return (0);
 }
 
 int	not_hungriest(int philo_i, t_data *data)

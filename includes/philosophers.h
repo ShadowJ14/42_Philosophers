@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
+/*   By: lprates <lprates@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/17 15:05:29 by lprates           #+#    #+#             */
-/*   Updated: 2021/11/23 23:04:29 by lprates          ###   ########.fr       */
+/*   Updated: 2022/01/08 00:47:50 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int		can_take_forks(t_philos *philo, int philo_i, t_data *data);
 void	drops_forks(t_philos *philo, int philo_i, t_data *data);
 int		check_all_full(t_data *data);
 void	philo_eating(t_philos *philo, t_data *data);
-void	philo_sleeping_and_thinking(t_philos *philo, t_data *data);
+int		philo_sleeping_and_thinking(t_philos *philo, t_data *data);
 int		error_handling(int error, t_data *data);
 void	destroy_forks(t_data *data);
 
