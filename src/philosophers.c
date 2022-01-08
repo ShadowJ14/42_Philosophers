@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
+/*   By: lprates <lprates@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/17 15:05:05 by lprates           #+#    #+#             */
-/*   Updated: 2021/11/23 23:05:26 by lprates          ###   ########.fr       */
+/*   Updated: 2022/01/08 00:37:24 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ void	*start_sim(void *input)
 		{
 			philo_eating(philo, data);
 			drops_forks(philo, philo->i, data);
-			philo_sleeping_and_thinking(philo, data);
 			if (data->settings.meals_nbr && check_all_full(data))
 				return (NULL);
+			philo_sleeping_and_thinking(philo, data);
 		}
 	}
 	return (NULL);

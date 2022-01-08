@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_actions.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lprates <lprates@student.42lisboa.com>     +#+  +:+       +#+        */
+/*   By: lprates <lprates@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/23 21:40:12 by lprates           #+#    #+#             */
-/*   Updated: 2021/11/23 23:31:06 by lprates          ###   ########.fr       */
+/*   Updated: 2022/01/08 00:19:04 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ int	can_take_forks(t_philos *philo, int philo_i, t_data *data)
 	int		right;
 	int		p_nbr;
 
+	left = 0;
 	p_nbr = data->settings.philo_nbr;
 	if (p_nbr > 1)
 		left = data->forks[(philo_i + 1) % p_nbr].taken;
